@@ -1,23 +1,21 @@
 package jdbctests;
 
+import utilities.DBConnector;
+
 import java.sql.*;
 
 public class TestConnection {
-    public static void main(String[] args) throws SQLException {
-        String dbURL = "jdbc:oracle:thin:@35.172.129.95:1521:XE";
-        String db_username = "hr";
-        String db_password = "hr";
 
-        Connection connection = DriverManager.getConnection(dbURL,db_username,db_password);
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from REGIONS");
+    public static void main(String[] args) throws SQLException {
+
+        ResultSet resultSet = DBConnector.getResultSet("select * from REGIONS");
 
 
         while (resultSet.next()){
             System.out.println(resultSet.getString(2));
         }
 
-        resultSet.first();
+        resultSet.beforeFirst();
 
         // move pointer to first row
         resultSet.next();
@@ -33,8 +31,6 @@ public class TestConnection {
 
 
         // close connections
-        resultSet.close();
-        statement.close();
-        connection.close();
+        DBConnector.closeConnections();
     }
 }
