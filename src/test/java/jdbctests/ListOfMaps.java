@@ -5,7 +5,10 @@ import utilities.DBConnector;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ListOfMaps {
 
@@ -30,8 +33,7 @@ public class ListOfMaps {
         // print Steven's last name and salary
         for (Map<String, Object> eachRow : queryData) {
             if ("Steven".equals(eachRow.get(resultSet.getMetaData().getColumnName(1)))) {
-                System.out.println(eachRow.get(resultSet.getMetaData().getColumnName(2)) + ", " +
-                        eachRow.get(resultSet.getMetaData().getColumnName(3)));
+                System.out.println(eachRow.get(resultSet.getMetaData().getColumnName(2)) + ", " + eachRow.get(resultSet.getMetaData().getColumnName(3)));
                 break;
             }
         }
