@@ -11,7 +11,11 @@ public class DBUtils {
     private static Statement statement;
     private static ResultSet resultSet;
 
-    public static void createConnection(String dbUrl,String dbUsername,String dbPassword) {
+    private static final String dbURL = ConfigurationReader.getProperty("dbURL");
+    private static final String db_username = ConfigurationReader.getProperty("db_username");
+    private static final String db_password = ConfigurationReader.getProperty("db_password");
+
+    public static void createConnection(String dbUrl, String dbUsername, String dbPassword) {
         try {
             connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
         } catch (SQLException e) {
@@ -21,16 +25,14 @@ public class DBUtils {
     }
 
     public static void createConnection() {
-        String dbUrl = "jdbc:oracle:thin:@44.195.19.167:1521:XE";
-        String dbUsername = "hr";
-        String dbPassword = "hr";
         try {
-            connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+            connection = DriverManager.getConnection(dbURL, db_username, db_password);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
     public static void destroy() {
         try {
             if (resultSet != null) {
@@ -46,41 +48,41 @@ public class DBUtils {
             e.printStackTrace();
         }
     }
+
     /**
-     *
-     * @param query
+     * @param query: SQL queries as String
      * @return returns a single cell value. If the results in multiple rows and/or
-     *         columns of data, only first column of the first row will be returned.
-     *         The rest of the data will be ignored
+     * columns of data, only first column of the first row will be returned.
+     * The rest of the data will be ignored
      */
     public static Object getCellValue(String query) {
         return getQueryResultList(query).get(0).get(0);
     }
+
     /**
-     *
-     * @param query
+     * @param query: SQL queries as String
      * @return returns a list of Strings which represent a row of data. If the query
-     *         results in multiple rows and/or columns of data, only first row will
-     *         be returned. The rest of the data will be ignored
+     * results in multiple rows and/or columns of data, only first row will
+     * be returned. The rest of the data will be ignored
      */
     public static List<Object> getRowList(String query) {
         return getQueryResultList(query).get(0);
     }
+
     /**
-     *
-     * @param query
+     * @param query: SQL queries as String
      * @return returns a map which represent a row of data where key is the column
-     *         name. If the query results in multiple rows and/or columns of data,
-     *         only first row will be returned. The rest of the data will be ignored
+     * name. If the query results in multiple rows and/or columns of data,
+     * only first row will be returned. The rest of the data will be ignored
      */
     public static Map<String, Object> getRowMap(String query) {
         return getQueryResultMap(query).get(0);
     }
+
     /**
-     *
-     * @param query
+     * @param query: SQL queries as String
      * @return returns query result in a list of lists where outer list represents
-     *         collection of rows and inner lists represent a single row
+     * collection of rows and inner lists represent a single row
      */
     public static List<List<Object>> getQueryResultList(String query) {
         executeQuery(query);
@@ -101,18 +103,16 @@ public class DBUtils {
         }
         return rowList;
     }
+
     /**
-     *
-     * @param query
-     * @param column
+     * @param query: SQL queries as String
+     * @param column: Column name that queried data from
      * @return list of values of a single column from the result set
      */
     public static List<Object> getColumnData(String query, String column) {
         executeQuery(query);
         List<Object> rowList = new ArrayList<>();
-        ResultSetMetaData rsmd;
         try {
-            rsmd = resultSet.getMetaData();
             while (resultSet.next()) {
                 rowList.add(resultSet.getObject(column));
             }
@@ -122,12 +122,12 @@ public class DBUtils {
         }
         return rowList;
     }
+
     /**
-     *
-     * @param query
+     * @param query : SQL queries as String
      * @return returns query result in a list of maps where the list represents
-     *         collection of rows and a map represent a single row with
-     *         key being the column name
+     * collection of rows and a map represent a single row with
+     * key being the column name
      */
     public static List<Map<String, Object>> getQueryResultMap(String query) {
         executeQuery(query);
@@ -148,8 +148,9 @@ public class DBUtils {
         }
         return rowList;
     }
+
     /**
-     * @param query
+     * @param query: SQL queries as String
      * @return List of columns returned in result set
      */
     public static List<String> getColumnNames(String query) {
@@ -158,8 +159,7 @@ public class DBUtils {
         ResultSetMetaData rsmd;
         try {
             rsmd = resultSet.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-            for (int i = 1; i <= columnCount; i++) {
+            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
                 columns.add(rsmd.getColumnName(i));
             }
         } catch (SQLException e) {
@@ -168,6 +168,7 @@ public class DBUtils {
         }
         return columns;
     }
+
     private static void executeQuery(String query) {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -182,9 +183,9 @@ public class DBUtils {
             e.printStackTrace();
         }
     }
+
     public static int getRowCount() throws Exception {
         resultSet.last();
-        int rowCount = resultSet.getRow();
-        return rowCount;
+        return resultSet.getRow();
     }
 }

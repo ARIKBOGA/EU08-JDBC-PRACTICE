@@ -1,7 +1,5 @@
 package utilities;
 
-import utilities.ConfigurationReader;
-
 import java.sql.*;
 
 public abstract class DBConnector {

@@ -1,0 +1,109 @@
+ 
+what database you used in your project?
+        
+In my project I used mysql database, but prior to that I have worked with oracle database as well I have done manual testing as well as automated testing on database.
+
+how do connect to database using selenium/java?
+
+ in java there is JDBC api that handles connections to the database. So this is what I used in my project to connect to db and automate.
+first based on the type of the database  i need to add the driver to the project. since I used maven,  added to the pom file. for mysql i used the mysql-connector-java driver, for oracle ojdbc driver.
+
+next I need create CONNECTION for this I use the connection class in Java/JDBC.
+connection class requires the url, username and password which is connection string
+after connection is created, I use the STATEMENT class to execute queries and RESULTSET class to store the query result and interact with it.
+
+
+Why we have learned SQL language ? 
+Sql is the language that we use to retrieve some information from database. I use it to get some info from db and compare against to UI.
+
+Different database types ? 
+Oracle,mysql,postgresql... 
+noSQL database example => mongoDB, no experience 
+
+how do you implement database testing ? 
+I execute the test manually, first I go and check the test case, implement UI part then based on the information that I need, I write my SQL query. 
+I use SQL developer to connect the database and run the queries. 
+
+For automating any test case, first thing I need is getting the connection string which consist of username,password, and url of the database. 
+I add those information to my confirugration.properties file to manage in one central location.
+Then based database type I added needed depedency to my maven project.(mysql-connector) 
+Then I have my DBUtils class which has some reusable methods to create connection,close connection and get the data in java data structure. 
+
+If the test data that I am getting from database is only one row, I use Map to store that information as a key and value format. The key will be Column names, and values will be each cell value belongs to that column.
+
+If I am getting more than one row, table format than I have ready method that stores information in List of map, which is each row represenet  as a one map they stored inside the list based on the row order. 
+
+What did you use create List of map methods dynamically ? 
+I use resulset object and also resultsetmetada. in order to get column names and number of columns I use methods from rsmd(resultsetmetadata) . to get cell values and iterate though each row I use ready methods from resutselt object. 
+which is .next method with while loop and getObject method which I can store anytype of information.
+
+After I got the result in Java data sturcute ( map or list of map) I compare those result with that I got from UI. 
+
+Assert.assertEquals(UiResult,DbResult);
+
+which part going to be expected result which one actual ? 
+It depends based on the scenario/test case.
+For example, if we are inserting some data using UI, lets say creating new user, new product,new books etc. then we assume these information stored in the databse properly. so we assume these are EXPECTED result bc we provide them though UI, and we try to get those information from Database and compare. In this case database will be actual result. 
+
+another scenario could be we might have some existing information in the database, and we might wanna check is the database infor correctly mapped to the UI of the application. in this case our expected data will be database data, and actual will be UI.
+
+What is your current framework sturcutre and how do you implement database testing with it ? 
+I have Junit-Cucumber framework that I use for automation UI, I added needed dependency depedency for example mysql for company. and all connection information to configuration.properties
+
+I manage creating and closing database connection though with custom hooks. so I have my custom @Before and @After hooks where I create connection and close the connection, I label my scenarios that includes database testing with the same tag that I use in my custom hooks.so I can make sure even if the test case fail, I close connection with the database.
+
+
+
+Can you use oracle sql developer to connect different types of database ? 
+yes, only thing that we need to do is adding needed driver to sql developer.
+Preferences -> Database - > Third party JDBC drivers. 
+
+
+Test case
+1.add connection string to project
+2.add dependency(if not added)
+3.add DBUtils under utilities
+4.adjust connection method in the db utils
+5.add needed custom hooks to hooks class and create destroy connection method
+6.create step definition for last step
+7.get data from ui, get from database and compare them
+what to compare
+	name
+	desc
+	year
+	isbn
+	author
+
+	1.getText()
+	2.getAttribute("value") --> for inputbox almost always
+	3.getAttribute("innerHTML")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
