@@ -1,7 +1,8 @@
 --how to find employees information of who is making highest salary in the company ?
 
 --get me the highest salary 
-select max(salary) from employees;
+select max(salary)
+from employees;
 
 --highest salary employee information
 select *
@@ -16,12 +17,13 @@ where salary = (select max(salary) from employees);
 
 --finding second highest salary
 --get highest salary first
-select max(salary) from employees;
+select max(salary)
+from employees;
 
 --highest after 24k 
 select max(salary)
 from employees
-where salary <24000;
+where salary < 24000;
 
 --one shot combining two queries
 
@@ -30,14 +32,25 @@ from employees
 where salary < (select max(salary) from employees);
 
 --employee information of who is making second highest salary ? 
-select * 
+select *
 from employees
-where salary = (select max(salary)from employees where salary < (select max(salary) from employees) );
+where salary = (select max(salary) from employees where salary < (select max(salary) from employees));
 
+-- FIRST_NAME, DEPARTMENT_NAME of sixth highest salary employees
+select FIRST_NAME, DEPARTMENT_NAME, SALARY
+from EMPLOYEES
+         join DEPARTMENTS d on d.DEPARTMENT_ID = EMPLOYEES.DEPARTMENT_ID
+where SALARY = (select min(SALARY)
+                from (select SALARY
+                      from (select distinct SALARY from EMPLOYEES order by SALARY desc)
+                      where ROWNUM < 7));
 ----------
-select * from employees;
+select *
+from employees
+where FIRST_NAME like 'A%ys%a';
 
-select * from employees
+select *
+from employees
 order by salary desc;
 
 select *
@@ -56,3 +69,13 @@ order by salary desc;
 select *
 from (select * from employees order by salary desc)
 where rownum < 11;
+
+-- get first 3 highest salary
+select SALARY
+from (select distinct SALARY from EMPLOYEES order by salary desc)
+where rownum < 4
+order by SALARY desc;
+
+
+select round(avg(SALARY),3)
+from EMPLOYEES;
